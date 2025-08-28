@@ -218,9 +218,11 @@ impl Client {
             tokio_util::sync::CancellationToken::new(),
         )
         .run()
-        .await?;
+        .boxed_local()
+        .await?
+        .boxed_local();
         wasm_bindgen_futures::spawn_local(async move {
-            if let Err(error) = chain_listener.boxed_local().await {
+            if let Err(error) = chain_listener.await {
                 tracing::error!("ChainListener error: {error:?}");
             }
         });
