@@ -203,16 +203,18 @@ impl<C: ClientContext> ChainListener<C> {
     /// Runs the chain listener.
     #[instrument(skip(self))]
     pub async fn run(mut self) -> Result<impl Future<Output = Result<(), Error>>, Error> {
+        let admin_chain_id;
         let chain_ids = {
             let guard = self.context.lock().await;
-            let mut chain_ids = BTreeSet::from_iter(guard.wallet().chain_ids());
-            chain_ids.insert(guard.wallet().genesis_admin_chain());
-            chain_ids
+            admin_chain_id = guard.wallet().genesis_admin_chain();
+            BTreeSet::from_iter(guard.wallet().chain_ids())
         };
 
-        self.listen_recursively(chain_ids).await?;
+        self.listen_recursively(std::iter::once(admin_chain_id).collect())
+            .await?;
 
         Ok(async {
+            self.listen_recursively(chain_ids).await?;
             loop {
                 match self.next_action().await? {
                     Action::ProcessInbox(chain_id) => self.maybe_process_inbox(chain_id).await?,
@@ -318,26 +320,9 @@ impl<C: ClientContext> ChainListener<C> {
     /// Starts listening for notifications about the given chains, and any chains that publish
     /// event streams those chains are subscribed to.
     async fn listen_recursively(&mut self, mut chain_ids: BTreeSet<ChainId>) -> Result<(), Error> {
-        let mut all_chain_ids = chain_ids.clone();
         while let Some(chain_id) = chain_ids.pop_first() {
-            let new_chain_ids = self.listen(chain_id).await?;
-            all_chain_ids.extend(new_chain_ids.iter().copied());
-            chain_ids.extend(new_chain_ids);
+            chain_ids.extend(self.listen(chain_id).await?);
         }
-
-        futures::future::try_join_all(all_chain_ids.iter().copied().map(|chain_id| {
-            let this = &*self;
-            async move {
-                this.listening
-                    .get(&chain_id)
-                    .expect("listen() should have inserted this above")
-                    .client
-                    .synchronize_from_validators()
-                    .await
-                    .map(drop)
-            }
-        }))
-        .await?;
 
         Ok(())
     }
@@ -350,7 +335,6 @@ impl<C: ClientContext> ChainListener<C> {
             return Ok(BTreeSet::new());
         }
         let client = self.context.lock().await.make_chain_client(chain_id);
-        client.synchronize_from_validators().await?;
         let (listener, abort_handle, notification_stream) = client.listen().await?;
         let join_handle = linera_base::task::spawn(listener.in_current_span());
         let listening_client =
