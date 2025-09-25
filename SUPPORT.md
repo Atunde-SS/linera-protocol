@@ -4,13 +4,13 @@
 This guide is designed for technical developers (focusing on code structure, crates, modules, and examples) and non-technical/newcomers (who can focus on high-level concepts and overviews). We'll progress from basics to advanced components, helping you assimilate information step by step. Each section includes:
 
 - **Overview**: What the section covers and its importance.
-- **Key Files/Folders**: Clickable links to GitHub (e.g., [`folder/file.rs`](https://github.com/linera-io/linera-protocol/blob/main/folder/file.rs) for code files, or tree views for folders).
+- **Key Files/Folders**: Clickable links to code files, or tree views for folders.
 - **Learning Path**: Suggested order, with tips on connecting concepts.
 - **Transitions**: Guidance on moving to the next section.
 
 The structure covers setup, core crates, supporting crates, examples, advanced tools, and additional resources. Start at the beginning for a complete understanding.
 
-## 1. Getting Started (Setup and Contributing)
+## 1. Getting Started (Setup and Installation)
 This section covers repository basics, installation, and contribution guidelines. Essential for setting up your environment and understanding the project.
 
 ### Key Concepts Covered
@@ -188,15 +188,12 @@ Practical Rust apps to test protocol.
 
 **Transition**: Explore benches and scripts for performance.
 
-## 5. Advanced Tools (Benchmarks and Scripts)
+## 5. Advanced Tools (Scripts)
 Performance tests and utilities.
 
 ### Key Folders/Files
-- [`benches/`](https://github.com/linera-io/linera-protocol/tree/main/benches): Benchmark crates.
 - [`scripts/`](https://github.com/linera-io/linera-protocol/tree/main/scripts): Helper scripts like run_local.sh.
 
-### Learning Path
-- Run benches with `cargo bench`.
 
 ## 6. High-Level Overview (Protocol Fundamentals)
 Conceptual introduction to Linera.
@@ -257,6 +254,5 @@ Devnets and testnets.
 - **Root Files**: [`LICENSE`](https://github.com/linera-io/linera-protocol/blob/main/LICENSE), [`book.toml`](https://github.com/linera-io/linera-documentation/blob/main/book.toml) for mdBook in docs repo.
 - **Building**: Use Cargo for code; mdBook for docs.
 - **Search**: GitHub search for keywords.
-- **Contributing**: Check issues in both repos.
   
 This guide sequences content to build knowledge progressively: concepts → building → operating → references. Revisit sections as needed for reinforcement. For updates, check the repo commits.
