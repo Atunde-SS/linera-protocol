@@ -179,13 +179,12 @@ Practical Rust apps to test protocol.
 
 ### Key Folders/Files
 - [`examples/`](https://github.com/linera-io/linera-protocol/tree/main/examples): Subfolders like aml, counter, crowd_funding, fungible, matching_engine, meta, non_fungible_token, ownable, social.
-- For each: [`examples/counter/Cargo.toml`](https://github.com/linera-io/linera-protocol/blob/main/examples/counter/Cargo.toml), [`examples/counter/contract.rs`](https://github.com/linera-io/linera-protocol/blob/main/examples/counter/contract.rs), [`examples/counter/service.rs`](https://github.com/linera-io/linera-protocol/blob/main/examples/counter/service.rs), etc.
 
 ### Learning Path
 1. Start with simple like counter.
 2. Advance to fungible, social.
 
-**Tips**: Deploy via README quickstart.
+**Tips**: Deploy via [`README COUNTER QUICK START`](https://github.com/linera-io/linera-protocol/tree/main/examples/counter)
 
 **Transition**: Explore benches and scripts for performance.
 
